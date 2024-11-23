@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend  # Path to the backend Dockerfile directory
+    ports:
+      - "8082:8082"       # Map container port to localhost
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - MONGO_DATABASE=${MONGO_DATABASE}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_CLUSTER=${MONGO_CLUSTER}
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend  # Path to the frontend Dockerfile directory
+    ports:
+      - "3000:80"          # Map React app to localhost
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+
