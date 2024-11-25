@@ -14,4 +14,3 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # Expose the port that the application will run on
 EXPOSE 8082
-
